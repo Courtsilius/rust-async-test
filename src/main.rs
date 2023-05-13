@@ -4,6 +4,7 @@ use clap::Parser;
 use rand::Rng;
 use std::io::{Read, Write};
 use std::ops::Add;
+use serde_json::from_str;
 use tokio;
 
 
@@ -36,9 +37,14 @@ async fn main() {
 }
 
 fn read(args: Args) {
+    let mut sum = 0;
     for n in 0..args.m {
         let file_name = get_filename(n);
-        read_file(file_name);
+        let s: String = match read_file(file_name) {
+            Ok(n) => from_str::<int>(n.to_string()),
+            Err(_) => panic!("K")
+        };
+        sum +=
 
     }
 }
