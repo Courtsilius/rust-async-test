@@ -37,9 +37,9 @@ fn read(args: Args) {
 }
 
 fn write(args: Args) {
-    for n in 0..args.n {
-        let mut file_name = n.to_string().add(".txt");
-        write_file(&file_name, args.m)
+    for n in 0..args.m {
+        let mut file_name = n.to_string().add(".data");
+        write_file(&file_name, args.n)
     }
 }
 
@@ -55,7 +55,7 @@ fn write_file(file_name: &String, count: u16) {
         Ok(file) => {
             file
         }
-        Err(e) => {
+        Err(_e) => {
             std::process::exit(1)
         }
     };
