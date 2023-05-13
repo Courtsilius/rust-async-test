@@ -23,14 +23,15 @@ struct Args {
     write: bool,
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let args = Args::parse();
 
     println!("M: {}, N: {}", args.n, args.m);
     if args.read {
         read(args);
     } else {
-        write(args);
+        write(args).await;
     }
 }
 
