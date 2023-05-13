@@ -4,6 +4,7 @@ use clap::Parser;
 use rand::Rng;
 use std::io::{Read, Write};
 use std::ops::Add;
+use tokio;
 
 
 #[derive(Parser, Debug)]
@@ -53,14 +54,18 @@ fn get_filename(n: u16) -> String {
     n.to_string().add(".data")
 }
 
-fn write(args: Args) {
+
+async fn write(args: Args) {
+    let mut tokio_spawns = Vec::new();
     for n in 0..args.m {
         let file_name = get_filename(n);
-        write_file(file_name, args.n)
+        tokio_spawns.push(tokio::spawn(write_file(file_name, args.n)));
     }
+
+    futures::future::join_all(tokio_spawns.into_iter()).await;
 }
 
-fn write_file(file_name: String, count: u16) {
+async fn write_file(file_name: String, count: u16) {
 
     let mut rng = rand::thread_rng();
 
