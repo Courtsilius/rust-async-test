@@ -1,7 +1,8 @@
 use std::fs::File;
+use std::io;
 use clap::Parser;
 use rand::Rng;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::ops::Add;
 
 
@@ -33,17 +34,33 @@ fn main() {
 }
 
 fn read(args: Args) {
-    todo!();
+    for n in 0..args.m {
+        let file_name = get_filename(n);
+        read_file(file_name);
+
+    }
+}
+
+fn read_file(file_name: String) -> Result<String, io::Error> {
+    let mut f = File::open(file_name)?;
+    let mut buffer = String::new();
+
+    f.read_to_string(&mut buffer)?;
+    Ok(buffer)
+}
+
+fn get_filename(n: u16) -> String {
+    n.to_string().add(".data")
 }
 
 fn write(args: Args) {
     for n in 0..args.m {
-        let mut file_name = n.to_string().add(".data");
-        write_file(&file_name, args.n)
+        let file_name = get_filename(n);
+        write_file(file_name, args.n)
     }
 }
 
-fn write_file(file_name: &String, count: u16) {
+fn write_file(file_name: String, count: u16) {
 
     let mut rng = rand::thread_rng();
 
